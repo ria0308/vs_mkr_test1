@@ -1,33 +1,34 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
-                git url: 'add here your url', credentialsId: 'add credentialsId'
+                // Checkout the code from the Git repository
+                git 'https://github.com/ria0308/vs_mkr_test1'
             }
         }
-        
         stage('Build') {
             steps {
-                // Крок для збірки проекту з Visual Studio
-                // Встановіть правильні шляхи до рішення/проекту та параметри MSBuild
-                bat '"path to MSBuild" test_repos.sln /t:Build /p:Configuration=Release'
+                // Dummy build step
+                echo 'Building...'
             }
         }
-
         stage('Test') {
             steps {
-                // Команди для запуску тестів
-                bat "x64\\Debug\\test_repos.exe --gtest_output=xml:test_report.xml"
+                // Dummy test step
+                echo 'Testing...'
             }
         }
     }
-
     post {
-    always {
-        // Publish test results using the junit step
-         // Specify the path to the XML test result files
+        always {
+            echo 'Pipeline has finished'
+        }
+        success {
+            echo 'Pipeline succeeded'
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
     }
-}
 }
