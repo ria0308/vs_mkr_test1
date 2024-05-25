@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define any environment variables you need here
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the source code from a Git repository
+                git branch: 'main', url: 'https://github.com/spring-projects/spring-petclinic.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Compile the source code
+                sh './mvnw clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run tests
+                sh './mvnw test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                // Package the application
+                sh './mvnw package'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy the application (for example purposes, we'll just echo a message)
+                echo 'Deploying the application...'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build, Test, and Deploy stages completed successfully!'
+        }
+        failure {
+            echo 'One or more stages failed. Please check the logs for details.'
+        }
+        always {
+            // Actions that should run regardless of the build status
+            cleanWs() // Clean workspace after build
+        }
+    }
+}
